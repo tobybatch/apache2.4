@@ -2,42 +2,11 @@
   ServerAdmin <%= node['apache']['contact'] %>
 
   DocumentRoot <%= node['apache']['docroot_dir'] %>/
-  <Directory />
-    Options FollowSymLinks
-    AllowOverride None
-  </Directory>
 
   <Directory <%= node['apache']['docroot_dir'] %>/>
     Options Indexes FollowSymLinks MultiViews
-    AllowOverride None
-    Order allow,deny
-    Allow from all
-  </Directory>
-
-  ScriptAlias /cgi-bin/ <%= node['apache']['cgibin_dir'] %>/
-  <Directory "<%= node['apache']['cgibin_dir'] %>">
-    AllowOverride None
-    Options ExecCGI -MultiViews +SymLinksIfOwnerMatch
-    Order allow,deny
-    Allow from all
-  </Directory>
-
-  ErrorLog <%= node['apache']['log_dir'] %>/<%= node['apache']['error_log'] %>
-
-  # Possible values include: debug, info, notice, warn, error, crit,
-  # alert, emerg.
-  LogLevel warn
-
-  CustomLog <%= node['apache']['log_dir'] %>/<%= node['apache']['access_log'] %> combined
-  ServerSignature On
-
-  Alias /doc/ "/usr/share/doc/"
-  <Directory "/usr/share/doc/">
-    Options Indexes MultiViews FollowSymLinks
-    AllowOverride None
-    Order deny,allow
-    Deny from all
-    Allow from 127.0.0.0/255.0.0.0 ::1/128
+    AllowOverride All
+    Require all granted
   </Directory>
 
   <% if %w[rhel fedora].include?(node['platform_family']) -%>
@@ -52,4 +21,5 @@
     ErrorDocument 403 /error/noindex.html
   </LocationMatch>
   <% end -%>
+
 </VirtualHost>
